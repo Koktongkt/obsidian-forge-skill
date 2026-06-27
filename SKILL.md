@@ -92,7 +92,7 @@ Concise overview of what happened and why it matters.
 - Key concepts, tools, frameworks, papers, APIs, tickers, people, places, files
 
 ## Topics Covered
-- [[Knowledge/<Topic>/<Existing Note>]] — only if corresponding knowledge note exists
+- [[<Existing Note>]] — brief description (only if corresponding knowledge note exists in Knowledge/<topic>/)
 
 ## Knowledge Extracted
 - [[Concept Name]] — brief description (only if new knowledge was actually created/updated)
