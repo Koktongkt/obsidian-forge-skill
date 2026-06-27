@@ -91,12 +91,21 @@ Concise overview of what happened and why it matters.
 ## Entities
 - Key concepts, tools, frameworks, papers, APIs, tickers, people, places, files
 
+## Topics Covered
+- [[Knowledge/<Topic>/<Existing Note>]] — only if corresponding knowledge note exists
+
 ## Knowledge Extracted
 - [[Concept Name]] — brief description (only if new knowledge was actually created/updated)
 
 ## Open Questions
 - Unresolved points or future directions
 ```
+
+### Topics Covered rules
+
+- **Only add wikilinks** if the session topic has a corresponding existing knowledge note in `Knowledge/<topic>/`
+- Do NOT link to folders — link to specific .md files only
+- If no corresponding knowledge note exists, omit this section entirely
 
 ### Summary rules
 
@@ -306,6 +315,7 @@ If nothing durable was found, say so clearly and still save the session note.
 
 - [ ] Session note saved under `Obsidian Vault/sessions/default_agent/`
 - [ ] Session file name includes a short topic title and the date
+- [ ] Session note includes "Topics Covered" (only with valid wikilinks to existing knowledge notes)
 - [ ] Session note includes "Knowledge Extracted" section (only with valid wikilinks)
 - [ ] Knowledge notes saved under `Obsidian Vault/Knowledge/`
 - [ ] Knowledge notes include "Source Sessions" only if session contributed to the note
