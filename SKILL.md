@@ -70,6 +70,7 @@ date: YYYY-MM-DD
 title: <Short Title>
 agent: default_agent
 source: conversation
+tags: [<optional, for graph visualization>]
 ---
 
 # Session — YYYY-MM-DD — <Short Title>
@@ -90,8 +91,19 @@ Concise overview of what happened and why it matters.
 ## Entities
 - Key concepts, tools, frameworks, papers, APIs, tickers, people, places, files
 
+## Topics Covered
+- Link to topic folders where knowledge was stored, e.g. [[Knowledge/AI]]
+- Link to topic folders where knowledge was stored, e.g. [[Knowledge/Systems]]
+
+## Knowledge Extracted
+- [[Concept Name 1]] — brief description of what was extracted
+- [[Concept Name 2]] — brief description of what was extracted
+
 ## Open Questions
 - Unresolved points or future directions
+
+## Backlinks
+- Notes that reference this session (auto-populated when others link here)
 ```
 
 ### Summary rules
@@ -179,7 +191,18 @@ Use clean conceptual names such as:
 
 If you create a new folder, choose a concise conceptual name that will age well.
 
-## Step 6 — Create or Update Knowledge Notes
+## Step 6 — Cross-Reference Before Creating
+
+Before creating any new knowledge note:
+
+1. **Search existing notes** in the Knowledge folder for related concepts.
+2. **Check topic folders** for similar ideas that could be updated instead.
+3. **Add wikilinks** to existing notes that should connect to the new knowledge.
+4. **Create bidirectional links** — if Note A relates to Note B, add the link to both notes.
+
+This ensures the graph grows organically and avoids duplicate notes.
+
+## Step 7 — Create or Update Knowledge Notes
 
 Each durable knowledge item should usually become its own standalone note.
 
@@ -189,6 +212,7 @@ Each durable knowledge item should usually become its own standalone note.
 ---
 type: knowledge
 topic: <Topic>
+tags: [<optional, for graph visualization>]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 source: <session file or brief source label>
@@ -209,8 +233,16 @@ Where and when it is useful.
 ## Limitations
 Edge cases, trade-offs, or constraints.
 
+## Source Sessions
+- [[session_name_YYYY-MM-DD]] — session(s) this knowledge was extracted from
+- Link back to the source session(s) for traceability
+
 ## Related Notes
-- [[Other Note]]
+- [[Related Concept A]] — why this connection exists
+- [[Related Concept B]] — why this connection exists
+
+## Backlinks
+- Notes that reference this concept (auto-populated when others link here)
 ```
 
 ### Knowledge extraction rules
@@ -221,15 +253,18 @@ Edge cases, trade-offs, or constraints.
 - Keep notes atomic enough to be searchable and reusable.
 - Use Obsidian wikilinks for related notes when helpful.
 
-## Step 7 — Organization Rules
+## Step 8 — Organization Rules
 
 - Keep session notes in the sessions archive only.
 - Keep durable knowledge in the Knowledge taxonomy only.
 - Avoid duplicating the same idea across multiple notes.
 - If a concept already exists, update it instead of creating a near-duplicate.
 - If a new topic folder is created, keep its name stable and conceptual.
+- **Create bidirectional wikilinks** — if Note A links to Note B, ensure Note B also links back to Note A.
+- **Link session notes to knowledge** — each session should link to the knowledge it extracted.
+- **Link knowledge to source session** — each knowledge note should link back to its source session.
 
-## Step 8 — Output Requirements
+## Step 9 — Output Requirements
 
 After finishing the archive workflow, return:
 
@@ -256,12 +291,26 @@ If nothing durable was found, say so clearly and still save the session note.
 5. **Skipping verification.**
    Confirm the files were actually written where intended.
 
+6. **Forgetting to add wikilinks.**
+   Always link session notes to the knowledge they extracted, and knowledge notes back to their source sessions.
+
+7. **One-way links only.**
+   Ensure bidirectional links — if Note A links to Note B, Note B must also link to Note A.
+
+8. **Missing cross-references.**
+   Search for related concepts before creating new notes; update existing notes with links instead of creating duplicates.
+
 ## Verification Checklist
 
 - [ ] Session note saved under `Obsidian Vault/sessions/default_agent/`
 - [ ] Session file name includes a short topic title and the date
+- [ ] Session note includes "Topics Covered" section linking to topic folders
+- [ ] Session note includes "Knowledge Extracted" section linking to knowledge notes
 - [ ] Knowledge notes saved under `Obsidian Vault/Knowledge/`
+- [ ] Knowledge notes include "Source Sessions" linking back to the source session
+- [ ] Knowledge notes include "Related Notes" with bidirectional links
 - [ ] Knowledge notes reflect durable, reusable information only
 - [ ] Existing notes were updated when overlap existed
 - [ ] New topic folders were created only when needed
+- [ ] Bidirectional links are in place between related notes
 - [ ] Final response includes file paths and a summary of extracted knowledge
