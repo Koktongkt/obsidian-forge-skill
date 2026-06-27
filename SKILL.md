@@ -1,7 +1,7 @@
 ---
 name: obsidian-forge
 description: Use when the user asks to archive a conversation or save a session into Obsidian. Creates a structured session note and extracts durable knowledge into the vault's Knowledge taxonomy.
-version: 1.1.0
+version: 1.1.1
 author: Hermes Agent
 license: MIT
 metadata:
