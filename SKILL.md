@@ -1,7 +1,7 @@
 ---
 name: obsidian-forge
 description: Use when the user asks to archive a conversation or save a session into Obsidian. Creates a structured session note and extracts durable knowledge into the vault's Knowledge taxonomy.
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 metadata:
@@ -55,7 +55,7 @@ Before writing anything:
    - Prefer the configured `OBSIDIAN_VAULT_PATH`.
    - If unavailable, use the documented fallback: `C:\Users\Tan19\Documents\Obsidian Vault`
 2. Check whether `sessions/default_agent` and `Knowledge` already exist.
-3. Inspect current Knowledge topic folders so new knowledge lands in the right place.
+3. Inspect current Knowledge topic folders and their existing notes.
 
 ## Step 1 — Generate a Structured Session Summary
 
@@ -91,19 +91,11 @@ Concise overview of what happened and why it matters.
 ## Entities
 - Key concepts, tools, frameworks, papers, APIs, tickers, people, places, files
 
-## Topics Covered
-- Link to topic folders where knowledge was stored, e.g. [[Knowledge/AI]]
-- Link to topic folders where knowledge was stored, e.g. [[Knowledge/Systems]]
-
 ## Knowledge Extracted
-- [[Concept Name 1]] — brief description of what was extracted
-- [[Concept Name 2]] — brief description of what was extracted
+- [[Concept Name]] — brief description (only if new knowledge was actually created/updated)
 
 ## Open Questions
 - Unresolved points or future directions
-
-## Backlinks
-- Notes that reference this session (auto-populated when others link here)
 ```
 
 ### Summary rules
@@ -191,20 +183,24 @@ Use clean conceptual names such as:
 
 If you create a new folder, choose a concise conceptual name that will age well.
 
-## Step 6 — Cross-Reference Before Creating
+## Step 6 — Check for Existing Knowledge Before Creating
 
-Before creating any new knowledge note:
+**Critical: Before creating any new knowledge note, you MUST check for existing notes.**
 
-1. **Search existing notes** in the Knowledge folder for related concepts.
-2. **Check topic folders** for similar ideas that could be updated instead.
-3. **Add wikilinks** to existing notes that should connect to the new knowledge.
-4. **Create bidirectional links** — if Note A relates to Note B, add the link to both notes.
+1. **List all existing knowledge notes** in the relevant topic folder.
+2. **Read each potentially relevant note** to check if the concepts already exist.
+3. **Compare the session's knowledge** against existing content:
+   - If the concepts already exist in an existing note → **do NOT create a new note**, do NOT add wikilink to Knowledge Extracted
+   - If the concepts are related but not fully covered → **update the existing note** with new insights, add wikilink to Knowledge Extracted
+   - If the concepts are entirely new → **create a new note**, add wikilink to Knowledge Extracted
 
-This ensures the graph grows organically and avoids duplicate notes.
+4. **Search across all Knowledge folders** if the topic is broad.
+
+This prevents duplicate notes and keeps the knowledge base clean.
 
 ## Step 7 — Create or Update Knowledge Notes
 
-Each durable knowledge item should usually become its own standalone note.
+Each durable knowledge item should usually become its own standalone note, or update an existing one.
 
 ### Knowledge note format
 
@@ -234,15 +230,17 @@ Where and when it is useful.
 Edge cases, trade-offs, or constraints.
 
 ## Source Sessions
-- [[session_name_YYYY-MM-DD]] — session(s) this knowledge was extracted from
-- Link back to the source session(s) for traceability
+- [[session_name_YYYY-MM-DD]] — only if this session was used to create/update the note
+```
 
-## Related Notes
-- [[Related Concept A]] — why this connection exists
-- [[Related Concept B]] — why this connection exists
+### Knowledge note format (updating existing)
 
-## Backlinks
-- Notes that reference this concept (auto-populated when others link here)
+When updating an existing note, add new insights to the appropriate section:
+
+```md
+## Source Sessions
+- [[existing_session_YYYY-MM-DD]]
+- [[new_session_YYYY-MM-DD]] — added new insights from this session
 ```
 
 ### Knowledge extraction rules
@@ -253,18 +251,25 @@ Edge cases, trade-offs, or constraints.
 - Keep notes atomic enough to be searchable and reusable.
 - Use Obsidian wikilinks for related notes when helpful.
 
-## Step 8 — Organization Rules
+## Step 8 — Session Note — Knowledge Extracted Section
+
+In the session note's "Knowledge Extracted" section:
+
+- **ONLY add wikilinks** if new knowledge was actually created or the existing note was updated
+- **DO NOT add wikilinks** if the concepts already existed in an existing note and nothing new was added
+- This keeps the session note honest about what was actually contributed
+
+## Step 9 — Organization Rules
 
 - Keep session notes in the sessions archive only.
 - Keep durable knowledge in the Knowledge taxonomy only.
 - Avoid duplicating the same idea across multiple notes.
 - If a concept already exists, update it instead of creating a near-duplicate.
 - If a new topic folder is created, keep its name stable and conceptual.
-- **Create bidirectional wikilinks** — if Note A links to Note B, ensure Note B also links back to Note A.
-- **Link session notes to knowledge** — each session should link to the knowledge it extracted.
-- **Link knowledge to source session** — each knowledge note should link back to its source session.
+- **Only add wikilinks to Knowledge Extracted** when new knowledge was actually created/updated
+- **Link knowledge to source session** only if that session contributed to the note
 
-## Step 9 — Output Requirements
+## Step 10 — Output Requirements
 
 After finishing the archive workflow, return:
 
@@ -283,7 +288,7 @@ If nothing durable was found, say so clearly and still save the session note.
    The session file name should reflect the dominant topic and date, not generic labels like `notes` or `summary`.
 
 3. **Creating duplicate knowledge notes.**
-   Search first and update existing notes when the concept already exists.
+   Always search existing notes first; update existing notes when the concept already exists.
 
 4. **Forcing knowledge into the wrong folder.**
    Create a new topic folder when the existing taxonomy does not fit.
@@ -291,26 +296,22 @@ If nothing durable was found, say so clearly and still save the session note.
 5. **Skipping verification.**
    Confirm the files were actually written where intended.
 
-6. **Forgetting to add wikilinks.**
-   Always link session notes to the knowledge they extracted, and knowledge notes back to their source sessions.
+6. **Adding wikilinks when no new knowledge was created.**
+   Only add to "Knowledge Extracted" if you actually created or updated a knowledge note.
 
-7. **One-way links only.**
-   Ensure bidirectional links — if Note A links to Note B, Note B must also link to Note A.
-
-8. **Missing cross-references.**
-   Search for related concepts before creating new notes; update existing notes with links instead of creating duplicates.
+7. **Adding redundant backlinks.**
+   Do not add backlinks sections — they are auto-generated by Obsidian.
 
 ## Verification Checklist
 
 - [ ] Session note saved under `Obsidian Vault/sessions/default_agent/`
 - [ ] Session file name includes a short topic title and the date
-- [ ] Session note includes "Topics Covered" section linking to topic folders
-- [ ] Session note includes "Knowledge Extracted" section linking to knowledge notes
+- [ ] Session note includes "Knowledge Extracted" section (only with valid wikilinks)
 - [ ] Knowledge notes saved under `Obsidian Vault/Knowledge/`
-- [ ] Knowledge notes include "Source Sessions" linking back to the source session
-- [ ] Knowledge notes include "Related Notes" with bidirectional links
+- [ ] Knowledge notes include "Source Sessions" only if session contributed to the note
 - [ ] Knowledge notes reflect durable, reusable information only
-- [ ] Existing notes were updated when overlap existed
-- [ ] New topic folders were created only when needed
-- [ ] Bidirectional links are in place between related notes
+- [ ] Existing notes were checked before creating new ones
+- [ ] No duplicate knowledge notes created
+- [ ] No wikilinks added when knowledge already existed
+- [ ] New topic folders created only when needed
 - [ ] Final response includes file paths and a summary of extracted knowledge
