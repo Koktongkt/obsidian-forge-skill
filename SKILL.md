@@ -1,7 +1,7 @@
 ---
 name: obsidian-forge
-description: Use when the user asks to archive a conversation or save a session into Obsidian. Creates a structured session note and extracts durable knowledge into the vault's Knowledge taxonomy.
-version: 1.1.1
+description: Use when the user asks to archive a conversation or save a session into Obsidian. Creates a structured session note and extracts durable knowledge into centralized Knowledge notes.
+version: 1.2.0
 author: Hermes Agent
 license: MIT
 metadata:
@@ -19,12 +19,14 @@ Use this skill when the user explicitly asks to save, archive, or persist a conv
 The workflow has two outputs:
 
 1. A **structured session summary** saved under `Obsidian Vault/sessions/default_agent/`
-2. **Durable knowledge notes** extracted from that same session and stored under `Obsidian Vault/Knowledge/`
+2. **Durable knowledge** extracted from that same session and stored under centralized notes in `Obsidian Vault/Knowledge/`
 
 The goal is to preserve both:
 
 - **Sessions** = what happened in this conversation
 - **Knowledge** = reusable information worth keeping beyond the conversation
+
+The knowledge system should remain **centralized and queryable**. Prefer broad topic folders and reusable pillar/container markdown notes over many tiny atomic notes.
 
 Always prefer the Obsidian skill for the file operations and use concrete vault paths, not variables.
 
@@ -44,7 +46,7 @@ Do **not** run this skill for ordinary chat or temporary notes.
 
 ### User preference shortcut
 
-- For finance / research deep-dives that contain reusable takeaways, always create the session note **and** look for at least one durable knowledge note worth storing under `Knowledge/`.
+- For finance / research deep-dives that contain reusable takeaways, always create the session note **and** look for durable knowledge worth merging into the Knowledge taxonomy.
 - If the conversation is mostly ephemeral with no reusable insight, still save the session note but say clearly that no durable knowledge was extracted.
 
 ## Prerequisites
@@ -56,6 +58,7 @@ Before writing anything:
    - If unavailable, use the documented fallback: `C:\Users\Tan19\Documents\Obsidian Vault`
 2. Check whether `sessions/default_agent` and `Knowledge` already exist.
 3. Inspect current Knowledge topic folders and their existing notes.
+4. Read likely relevant existing notes before creating or updating knowledge.
 
 ## Step 1 — Generate a Structured Session Summary
 
@@ -95,7 +98,7 @@ Concise overview of what happened and why it matters.
 - [[<Existing Note>]] — brief description (only if corresponding knowledge note exists in Knowledge/<topic>/)
 
 ## Knowledge Extracted
-- [[Concept Name]] — brief description (only if new knowledge was actually created/updated)
+- [[<Existing or New Knowledge Note>]] — what was created or updated
 
 ## Open Questions
 - Unresolved points or future directions
@@ -103,9 +106,12 @@ Concise overview of what happened and why it matters.
 
 ### Topics Covered rules
 
-- **Only add wikilinks** if the session topic has a corresponding existing knowledge note in `Knowledge/<topic>/`
-- Do NOT link to folders — link to specific .md files only
-- If no corresponding knowledge note exists, omit this section entirely
+- Add simplified wikilinks like `[[Stock Analysis Framework]]`, not full folder paths.
+- Only add wikilinks if the session topic has a corresponding existing knowledge note in `Knowledge/<topic>/`.
+- Do NOT link to folders.
+- If no corresponding knowledge note exists, omit this section entirely.
+- `Topics Covered` may link to existing notes even if the session did not update them.
+- `Knowledge Extracted` should only link to notes that were created or updated.
 
 ### Summary rules
 
@@ -151,7 +157,7 @@ From the same session, extract only information that is worth keeping long-term.
 - reusable beyond this single session
 - not time-specific
 - stable across contexts
-- a concept, principle, method, or enduring insight
+- a concept, principle, framework, method, taxonomy, or enduring insight
 - likely to help future work or decision-making
 
 ### Exclude:
@@ -163,120 +169,183 @@ From the same session, extract only information that is worth keeping long-term.
 - short-lived plans
 - conversational filler
 - details that only matter to this one session
+- isolated facts that do not improve an existing reusable knowledge note
 
 If something is useful but still session-specific, keep it only in the session note, not in Knowledge.
 
-## Step 5 — Find the Right Knowledge Topic Folder
+## Step 5 — Choose the Knowledge Container
 
-Place each knowledge item under the most relevant topic folder inside:
+Do not think only in terms of topic folders. First choose the broad topic folder, then choose the best **knowledge container note** inside it.
 
-`Obsidian Vault/Knowledge/`
+### Container-first decision order
 
-### Topic selection rules
+1. Identify the broad top-level topic folder under `Obsidian Vault/Knowledge/`.
+2. Inspect existing markdown notes inside that topic folder.
+3. Prefer updating an existing broad / pillar / container note.
+4. Add new knowledge as a section or subsection inside that note.
+5. Create a new markdown note only when the concept deserves to be a reusable container.
+6. Create a new topic folder only as a last resort.
 
-1. First inspect existing topic folders.
-2. Prefer the best existing folder if it is a strong semantic fit.
-3. If the item does not fit any existing folder, create a new clean topic folder.
-4. Do not force a concept into the wrong category just to avoid making a new folder.
+### Topic folder rules
 
-### Good folder names
+- Keep top-level topic folders broad and stable.
+- Prefer existing folders such as `AI`, `Systems`, `Coding`, `Markets`, `Mental Models`, and `Research`.
+- Do not create narrow folders for single entities, single sessions, one-off tools, or small subtopics.
+- Create a new topic folder only when the concept clearly does not fit any current top-level folder and is likely to recur across future sessions.
+- If in doubt, use the closest existing broad folder and create/update a better container note inside it.
 
-Use clean conceptual names such as:
+### Pillar / container note examples
 
-- `AI`
-- `Systems`
-- `Coding`
-- `Markets`
-- `Mental_Models`
-- `Research`
+Prefer notes like:
 
-If you create a new folder, choose a concise conceptual name that will age well.
+- `Stock Analysis Framework.md`
+- `Crypto Asset Valuation.md`
+- `AI Company Valuation.md`
+- `Market Structure and Liquidity.md`
+- `Agent Memory and Knowledge Systems.md`
+- `Software Debugging Frameworks.md`
 
-## Step 6 — Check for Existing Knowledge Before Creating
+Avoid creating many atomic notes like:
 
-**Critical: Before creating any new knowledge note, you MUST check for existing notes.**
+- `Rule of 40.md` when it can be a section in `Stock Analysis Framework.md`
+- `ETH Staking Yield.md` when it can be a section in `Crypto Asset Valuation.md`
+- `Rollup Fee Leakage.md` when it can be a section in `Crypto Asset Valuation.md`
+- `Bollinger Bands.md` when it can be a section in `Technical Analysis Framework.md`
 
-1. **List all existing knowledge notes** in the relevant topic folder.
-2. **Read each potentially relevant note** to check if the concepts already exist.
-3. **Compare the session's knowledge** against existing content:
-   - If the concepts already exist in an existing note → **do NOT create a new note**, do NOT add wikilink to Knowledge Extracted
-   - If the concepts are related but not fully covered → **update the existing note** with new insights, add wikilink to Knowledge Extracted
-   - If the concepts are entirely new → **create a new note**, add wikilink to Knowledge Extracted
+## Step 6 — Check Existing Knowledge Before Creating
 
-4. **Search across all Knowledge folders** if the topic is broad.
+**Critical: Before creating any new knowledge note, you MUST check for existing notes and choose the least-fragmented home for the knowledge.**
 
-This prevents duplicate notes and keeps the knowledge base clean.
+1. **List existing knowledge notes** in the relevant topic folder.
+2. **Search across all Knowledge folders** if the concept could belong to more than one area.
+3. **Read each potentially relevant note** to check whether the concept already exists or fits as a section.
+4. **Classify the session's durable knowledge:**
+   - **Already covered:** the concept already exists in an existing note → do not update, do not create a new note, do not add a `Knowledge Extracted` wikilink.
+   - **New detail for existing container:** the concept is related to an existing note but adds new insight → update that existing note, usually as a section/subsection/bullet, then add that note to `Knowledge Extracted`.
+   - **New broad cluster:** the concept is broad, reusable, and cannot fit cleanly into an existing note → create a new knowledge note.
+   - **Too narrow:** the concept is durable but too small to justify a note and does not improve an existing container → keep it in the session note only.
+
+### New note creation threshold
+
+Create a new knowledge note only if at least **two** of the following are true:
+
+- It will likely be referenced in future sessions.
+- It contains multiple sub-concepts or recurring questions.
+- It does not fit cleanly inside an existing note.
+- It represents a reusable framework, taxonomy, method, model, or domain.
+- Adding it to an existing note would make that note confusing or too broad.
+- It is a central entity or research object the user repeatedly studies.
+
+A concept being new is **not** enough reason to create a new file.
 
 ## Step 7 — Create or Update Knowledge Notes
 
-Each durable knowledge item should usually become its own standalone note, or update an existing one.
+Durable knowledge should usually be merged into the most relevant existing knowledge note. Create a standalone note only when the concept is broad enough to serve as a reusable knowledge container.
 
-### Knowledge note format
+### Section-first policy
+
+- If extracted knowledge is a sub-concept, add it as a section or subsection inside an existing note.
+- If extracted knowledge refines a framework, update the existing framework note.
+- If extracted knowledge is an example or application, add it under `## Applications`, `## Examples`, or a relevant subsection.
+- If extracted knowledge is a limitation, add it under `## Limitations`.
+- Do not create one markdown file per small insight, metric, indicator, definition, entity, or observation.
+
+### Knowledge note format for pillar/container notes
 
 ```md
 ---
 type: knowledge
 topic: <Topic>
+scope: pillar
 tags: [<optional, for graph visualization>]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 source: <session file or brief source label>
 ---
 
-# <Concept Name>
+# <Broad Knowledge Container>
 
-## Definition
-Clear explanation of the concept.
+## Overview
+High-level explanation of the knowledge area.
 
-## Key Ideas
-- Core points
-- Important nuances
+## Core Concepts
+
+### <Subconcept A>
+- Explanation, principles, and reusable details.
+
+### <Subconcept B>
+- Explanation, principles, and reusable details.
 
 ## Applications
-Where and when it is useful.
+Where and when this knowledge is useful.
 
 ## Limitations
 Edge cases, trade-offs, or constraints.
+
+## Related Notes
+- [[Related Existing Note]]
 
 ## Source Sessions
 - [[session_name_YYYY-MM-DD]] — only if this session was used to create/update the note
 ```
 
-### Knowledge note format (updating existing)
+### Updating existing notes
 
-When updating an existing note, add new insights to the appropriate section:
+When updating an existing note:
+
+1. Add new content to the most relevant existing section.
+2. Create a new subsection only if it improves scanability.
+3. Keep the note cohesive; if it becomes too broad, split only after a clear pattern emerges across multiple sessions.
+4. Add or update `updated: YYYY-MM-DD` if frontmatter exists.
+5. Add the session to `## Source Sessions` only if this session contributed new content to the note.
+
+Example:
 
 ```md
 ## Source Sessions
 - [[existing_session_YYYY-MM-DD]]
-- [[new_session_YYYY-MM-DD]] — added new insights from this session
+- [[new_session_YYYY-MM-DD]] — added section on valuation risk
 ```
 
 ### Knowledge extraction rules
 
+- Prefer updating existing broad/pillar notes over creating new atomic notes.
 - Merge similar concepts into an existing note when appropriate.
-- Prefer updating an existing note over creating a duplicate.
 - If the session reveals a better wording, refine the existing note.
-- Keep notes atomic enough to be searchable and reusable.
-- Use Obsidian wikilinks for related notes when helpful.
+- Keep notes broad enough to be useful retrieval units but focused enough to stay coherent.
+- Use Obsidian wikilinks for related existing notes when helpful, using simplified note-name links.
 
-## Step 8 — Session Note — Knowledge Extracted Section
+## Step 8 — Session Note — Knowledge Sections
 
-In the session note's "Knowledge Extracted" section:
+In the session note:
 
-- **ONLY add wikilinks** if new knowledge was actually created or the existing note was updated
-- **DO NOT add wikilinks** if the concepts already existed in an existing note and nothing new was added
-- This keeps the session note honest about what was actually contributed
+### Topics Covered
+
+- Link to existing knowledge notes that the session meaningfully discussed.
+- Use simplified wikilinks such as `[[Stock Analysis Framework]]`.
+- Include notes even if they were not updated.
+- Do not link to folders.
+
+### Knowledge Extracted
+
+- Only add wikilinks if new knowledge was actually created or an existing note was updated.
+- Do not add wikilinks if the concepts already existed and nothing new was added.
+- Link to the container note that was updated, not to a non-existent atomic concept.
+- If nothing was extracted, write: `No new durable knowledge was extracted.`
 
 ## Step 9 — Organization Rules
 
 - Keep session notes in the sessions archive only.
 - Keep durable knowledge in the Knowledge taxonomy only.
+- Prefer centralized pillar/container notes over many atomic notes.
 - Avoid duplicating the same idea across multiple notes.
 - If a concept already exists, update it instead of creating a near-duplicate.
+- If a concept is new but fits an existing container, update the container note.
+- If a concept is too narrow to improve a container note, leave it in the session note only.
 - If a new topic folder is created, keep its name stable and conceptual.
-- **Only add wikilinks to Knowledge Extracted** when new knowledge was actually created/updated
-- **Link knowledge to source session** only if that session contributed to the note
+- Only add wikilinks to `Knowledge Extracted` when new knowledge was actually created/updated.
+- Link knowledge to source session only if that session contributed new content to the note.
+- Do not add manual `Backlinks` sections; Obsidian generates backlinks automatically.
 
 ## Step 10 — Output Requirements
 
@@ -284,44 +353,48 @@ After finishing the archive workflow, return:
 
 - the session file path
 - the list of knowledge files created or updated
-- a brief summary of what was extracted
+- the existing knowledge notes linked under `Topics Covered`
+- a brief summary of what was extracted or merged
 
 If nothing durable was found, say so clearly and still save the session note.
 
 ## Common Pitfalls
 
-1. **Saving ephemeral content into Knowledge.**
+1. **Creating atomic notes for every insight.**
+   Do not create one file per small idea. Prefer adding sections to centralized knowledge notes.
+
+2. **Saving ephemeral content into Knowledge.**
    Keep temporary decisions, tasks, and one-off session details in the session note only.
 
-2. **Using vague file names.**
+3. **Using vague file names.**
    The session file name should reflect the dominant topic and date, not generic labels like `notes` or `summary`.
 
-3. **Creating duplicate knowledge notes.**
-   Always search existing notes first; update existing notes when the concept already exists.
+4. **Creating duplicate knowledge notes.**
+   Always search existing notes first; update existing notes when the concept already exists or fits an existing container.
 
-4. **Forcing knowledge into the wrong folder.**
-   Create a new topic folder when the existing taxonomy does not fit.
-
-5. **Skipping verification.**
-   Confirm the files were actually written where intended.
+5. **Creating narrow topic folders.**
+   New top-level topic folders should be rare. Prefer broad folders and better container notes.
 
 6. **Adding wikilinks when no new knowledge was created.**
-   Only add to "Knowledge Extracted" if you actually created or updated a knowledge note.
+   Only add to `Knowledge Extracted` if you actually created or updated a knowledge note.
 
-7. **Adding redundant backlinks.**
+7. **Linking to folders or full paths.**
+   Use simplified note-name wikilinks like `[[Stock Analysis Framework]]`, not `[[Knowledge/Markets]]` or `[[Knowledge/Markets/Stock Analysis Framework]]`.
+
+8. **Adding redundant backlinks.**
    Do not add backlinks sections — they are auto-generated by Obsidian.
 
 ## Verification Checklist
 
 - [ ] Session note saved under `Obsidian Vault/sessions/default_agent/`
 - [ ] Session file name includes a short topic title and the date
-- [ ] Session note includes "Topics Covered" (only with valid wikilinks to existing knowledge notes)
-- [ ] Session note includes "Knowledge Extracted" section (only with valid wikilinks)
-- [ ] Knowledge notes saved under `Obsidian Vault/Knowledge/`
-- [ ] Knowledge notes include "Source Sessions" only if session contributed to the note
+- [ ] Session note includes `Topics Covered` only with valid simplified wikilinks to existing knowledge notes
+- [ ] Session note includes `Knowledge Extracted` only for notes created or updated
+- [ ] Existing Knowledge notes were searched before creating new ones
+- [ ] Existing container/pillar notes were preferred over new atomic notes
+- [ ] No duplicate knowledge notes were created
+- [ ] No new topic folder was created unless clearly necessary
+- [ ] New knowledge note creation passed the threshold in Step 6
+- [ ] Knowledge notes include `Source Sessions` only if session contributed new content
 - [ ] Knowledge notes reflect durable, reusable information only
-- [ ] Existing notes were checked before creating new ones
-- [ ] No duplicate knowledge notes created
-- [ ] No wikilinks added when knowledge already existed
-- [ ] New topic folders created only when needed
-- [ ] Final response includes file paths and a summary of extracted knowledge
+- [ ] Final response includes file paths and a summary of extracted or merged knowledge
