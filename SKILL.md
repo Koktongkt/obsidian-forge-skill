@@ -177,6 +177,8 @@ If something is useful but still session-specific, keep it only in the session n
 
 Do not think only in terms of topic folders. First choose the broad topic folder, then choose the best **knowledge container note** inside it.
 
+For expanded examples, the decision matrix, and wikilink conventions, see `references/knowledge-architecture.md`.
+
 ### Container-first decision order
 
 1. Identify the broad top-level topic folder under `Obsidian Vault/Knowledge/`.
@@ -196,7 +198,7 @@ Do not think only in terms of topic folders. First choose the broad topic folder
 
 ### Pillar / container note examples
 
-Prefer notes like:
+Prefer knowledge notes like Examples:
 
 - `Stock Analysis Framework.md`
 - `Crypto Asset Valuation.md`
@@ -205,7 +207,7 @@ Prefer notes like:
 - `Agent Memory and Knowledge Systems.md`
 - `Software Debugging Frameworks.md`
 
-Avoid creating many atomic notes like:
+Avoid creating many atomic knowledge notes like:
 
 - `Rule of 40.md` when it can be a section in `Stock Analysis Framework.md`
 - `ETH Staking Yield.md` when it can be a section in `Crypto Asset Valuation.md`
@@ -225,7 +227,7 @@ Avoid creating many atomic notes like:
    - **New broad cluster:** the concept is broad, reusable, and cannot fit cleanly into an existing note → create a new knowledge note.
    - **Too narrow:** the concept is durable but too small to justify a note and does not improve an existing container → keep it in the session note only.
 
-### New note creation threshold
+### New knowledge note creation threshold
 
 Create a new knowledge note only if at least **two** of the following are true:
 
@@ -282,8 +284,31 @@ Where and when this knowledge is useful.
 ## Limitations
 Edge cases, trade-offs, or constraints.
 
-## Related Notes
-- [[Related Existing Note]]
+## Related Notes (optional)
+Only include durable semantic neighbors.
+
+Include this section only when the connection is genuinely useful for long-term navigation or comparison.
+
+Good reasons to include a related note:
+- peer concept
+- companion framework
+- prerequisite concept
+- contrasting concept
+- stable extension of the same idea
+
+Do not include:
+- source sessions
+- topics covered
+- folders or parent categories
+- transient references from the session
+- notes that were only casually mentioned
+- one-off examples or tangential mentions
+
+Rules:
+- Keep this section small and high-signal
+- Usually 0–3 notes by default
+- Use simplified wikilinks to note names only
+- If the relationship is unclear or temporary, omit it
 
 ## Source Sessions
 - [[session_name_YYYY-MM-DD]] — only if this session was used to create/update the note
